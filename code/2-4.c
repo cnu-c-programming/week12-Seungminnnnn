@@ -7,23 +7,24 @@ int main(int argc, const char* argv[]) {
 
     FILE* fp = fopen(argv[1], "r");
 
-    FILE* fp1 = fopen("myfile.txt","w");
+    if (fp == NULL) {
+        return 0;
+    }
 
     int count[26] = {0};
     char alpha;
 
-    while(fscanf(fp,"%c", &alpha) == 1) {
+    while (fscanf(fp, "%c", &alpha) == 1) {
         if (alpha >= 'a' && alpha <= 'z') {
             count[alpha - 'a']++;
         }
     }
 
     for (int i = 0; i < 26; i++) {
-        fprintf(fp1, "%c: %d\n", 'a'+i, count[i]);
+        printf("%c: %d\n", 'a' + i, count[i]);
     }
 
     fclose(fp);
-    fclose(fp1);
 
     return 0;
 }
