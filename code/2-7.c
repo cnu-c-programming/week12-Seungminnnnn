@@ -1,6 +1,4 @@
 #include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 
 typedef struct config {
     char InputFileName[64];
@@ -12,23 +10,28 @@ typedef struct config {
 void config_parser(Config* config_ptr) {
     FILE* fp = fopen("config.txt", "r");
 
-    fscanf(fp,"%s\n%d\n%s\n%llu\n", config_ptr->InputFileName,
-        &config_ptr->Options,
-        config_ptr->SectionName,
-        &config_ptr->Address);
-    
-    fclose(fp);    
+    if (fp == NULL) {
+        return;
+    }
+
+    fscanf(fp, "%*[^=]=%63s", config_ptr->InputFileName);
+    fscanf(fp, "%*[^=]=%d", &config_ptr->Options);
+    fscanf(fp, "%*[^=]=%63s", config_ptr->SectionName);
+    fscanf(fp, "%*[^=]=%llx", &config_ptr->Address);
+
+    fclose(fp);
 }
 
 int main(int argc, const char* argv[]) {
-    Config config;
+    Config config = {0};
+
     config_parser(&config);
 
-    printf("config: %s %d %s %llu\n", 
-        config.InputFileName, 
-        config.Options,
-        config.SectionName,
-        config.Address);
+    printf("config: %s %d %s %llu\n",
+           config.InputFileName,
+           config.Options,
+           config.SectionName,
+           config.Address);
+
     return 0;
 }
-
